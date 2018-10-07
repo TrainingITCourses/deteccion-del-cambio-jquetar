@@ -1374,7 +1374,7 @@
       },
       {
           "id": 96,
-          "name": "Khrunichev State Research and Production Space Center",
+            "name": "Khrunichev State Research and Production Space Center",
           "countryCode": "RUS",
           "abbrev": "KhSC",
           "type": 1,

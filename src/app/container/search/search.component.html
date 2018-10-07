@@ -1,0 +1,16 @@
+<p>
+  search works!
+</p>
+<label>Selecciona el tipo de filtro</label>:
+<!--<select ngModel="selectedFilter">-->
+<select  (change)="onFilterChange($event.target.value)">
+  <option selected="selected" [value]="null" ></option>
+  <option id="agencies" >Agencies</option>
+  <option id="missions" >Missions</option>
+  <option id="status" >Status</option>
+</select>
+<label>Selecciona el valor</label>:
+<select (change)="onFilterChange2($event.target.value)">
+  <option selected="selected" [value]="null" ></option>
+  <option *ngFor="let elem of list" [value]="elem.id">{{elem.name}}</option>
+</select>

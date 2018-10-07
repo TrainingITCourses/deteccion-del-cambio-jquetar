@@ -1,6 +1,3 @@
-<p>
-  container works!
-</p>
 <app-search (filter)="onFilter($event)"></app-search>
 <div *ngIf="filteredLaunches">
   <app-counter [counter]="{length:filteredLaunches.length, message:'Launches found'}"></app-counter>

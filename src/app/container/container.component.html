@@ -1,5 +1,5 @@
 <app-search (filter)="onFilter($event)"></app-search>
-<div *ngIf="filteredLaunches">
-  <app-counter [counter]="{length:filteredLaunches.length, message:'Launches found'}"></app-counter>
-  <app-launches-list [launches]="filteredLaunches"></app-launches-list>
+<div *ngIf="filteredLaunches$">
+  <app-counter [counter]="{length:(filteredLaunches$ | async).length, message:'Launches found'}"></app-counter>
+  <app-launches-list [launches]="filteredLaunches$ | async"></app-launches-list>
 </div>

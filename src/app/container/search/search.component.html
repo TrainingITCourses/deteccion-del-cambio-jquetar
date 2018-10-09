@@ -1,5 +1,4 @@
 <label>Selecciona el tipo de filtro</label>:
-<!--<select ngModel="selectedFilter">-->
 <select  (change)="onFilterChange($event.target.value)">
   <option selected="selected" [value]="null" ></option>
   <option id="agencies" >Agencies</option>

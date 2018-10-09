@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {ApiService} from '../store/api.service';
 import {SearchResult} from './search/search.component';
+import {GlobalSlideTypes, GlobalStore} from '../store/global-store.state';
+import {map} from 'rxjs/operators';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'app-container',
@@ -8,28 +11,40 @@ import {SearchResult} from './search/search.component';
   styleUrls: ['./container.component.css']
 })
 export class ContainerComponent implements OnInit {
-  public filteredLaunches: any[] = [];
+  public filteredLaunches$: Observable<any[]>;
   public filter: SearchResult;
 
-  constructor(private api: ApiService) { }
+  constructor(
+    private api: ApiService,
+    private global: GlobalStore
+    ) { }
 
   ngOnInit() {
-    this.api.getLaunches$().subscribe(() => {
-        this.setDataAndUpdateViews();
-      });
+    this.loadData();
+    this.observeLaunches();
+    this.observeLaunches();
+  }
+  private loadData() {
+    this.api.getLaunches();
+    this.api.getStatusTypes();
+    this.api.getAgencies();
+    this.api.getMissionTypes();
   }
 
-  private setDataAndUpdateViews = () => {
-    if (!this.filter || !this.filter.value) {
-      this.filteredLaunches = [... this.api.launches];
-      return;
-    }
-    this.filteredLaunches = this.api.launches.filter(item => {
-      return this.filterItem(item);
-      });
+  private observeLaunches() {
+    this.filteredLaunches$ = this.global.select$(GlobalSlideTypes.launches)
+      .pipe(
+        map(launches => launches
+            .filter(l => this.filterItem(l))
+            .sort((a, b) => (a.isostart > b.isostart ? 1 : -1))
+        ),
+      );
   }
 
   private filterItem = (item: any): boolean => {
+    if (!this.filter || !this.filter.value) {
+      return true;
+    }
     switch (this.filter.type) {
       case 'Agencies': {
         return item.location.pads.some(item2 =>
@@ -53,12 +68,10 @@ export class ContainerComponent implements OnInit {
         return false;
       }
     }
-
-}
+  }
 
   public onFilter = (filter: SearchResult) => {
     this.filter = filter;
-    this.setDataAndUpdateViews();
-
+    this.observeLaunches();
   }
 }

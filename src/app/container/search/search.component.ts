@@ -1,5 +1,5 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {ApiService} from '../../store/api.service';
+import {ChangeDetectionStrategy, Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {GlobalSlideTypes, GlobalStore} from '../../store/global-store.state';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -15,18 +15,12 @@ export class SearchComponent implements OnInit {
   public list: any[];
   @Output()public filter = new EventEmitter<SearchResult>();
 
-  constructor(private apiService: ApiService) { }
+  constructor(private global: GlobalStore) { }
 
   ngOnInit() {
-    this.apiService.getStatusTypes$().subscribe(() => {
-      this.statuses = this.apiService.statuses.sort((a, b) => (a.name > b.name ? 1 : -1));
-    });
-    this.apiService.getAgencies$().subscribe(() => {
-      this.agencies = this.apiService.agencies.sort((a, b) => (a.name > b.name ? 1 : -1));
-    });
-    this.apiService.getMissionTypes$().subscribe(() => {
-      this.missions = this.apiService.missions.sort((a, b) => (a.name > b.name ? 1 : -1));
-    });
+      this.statuses = this.global.selectSnapShot(GlobalSlideTypes.statuses).sort((a, b) => (a.name > b.name ? 1 : -1));
+      this.agencies = this.global.selectSnapShot(GlobalSlideTypes.agencies).sort((a, b) => (a.name > b.name ? 1 : -1));
+      this.missions = this.global.selectSnapShot(GlobalSlideTypes.missions).sort((a, b) => (a.name > b.name ? 1 : -1));
   }
 
   public onFilterChange(value: string): void {

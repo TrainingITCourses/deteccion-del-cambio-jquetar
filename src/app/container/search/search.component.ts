@@ -1,5 +1,6 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, OnInit, Output} from '@angular/core';
-import {GlobalSlideTypes, GlobalStore} from '../../store/global-store.state';
+import {Store} from '@ngrx/store';
+import {State} from '../../store';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -15,12 +16,18 @@ export class SearchComponent implements OnInit {
   public list: any[];
   @Output()public filter = new EventEmitter<SearchResult>();
 
-  constructor(private global: GlobalStore) { }
+  constructor(private store: Store<State>) { }
 
   ngOnInit() {
-      this.statuses = this.global.selectSnapShot(GlobalSlideTypes.statuses).sort((a, b) => (a.name > b.name ? 1 : -1));
-      this.agencies = this.global.selectSnapShot(GlobalSlideTypes.agencies).sort((a, b) => (a.name > b.name ? 1 : -1));
-      this.missions = this.global.selectSnapShot(GlobalSlideTypes.missions).sort((a, b) => (a.name > b.name ? 1 : -1));
+    this.store.select('status').subscribe(status => {
+      this.statuses = status.statuses.sort((a, b) => (a.name > b.name ? 1 : -1));
+    });
+    this.store.select('agencie').subscribe(agencies => {
+      this.agencies = agencies.statuses.sort((a, b) => (a.name > b.name ? 1 : -1));
+    });
+    this.store.select('mission').subscribe(mission => {
+      this.missions = mission.statuses.sort((a, b) => (a.name > b.name ? 1 : -1));
+    });
   }
 
   public onFilterChange(value: string): void {

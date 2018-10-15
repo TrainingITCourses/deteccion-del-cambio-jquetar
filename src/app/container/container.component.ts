@@ -1,9 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import {ApiService} from '../store/api.service';
 import {SearchResult} from './search/search.component';
-import {GlobalSlideTypes, GlobalStore} from '../store/global-store.state';
-import {map} from 'rxjs/operators';
+import {map, tap} from 'rxjs/operators';
 import {Observable} from 'rxjs';
+import {Store} from '@ngrx/store';
+import {State} from '../store';
+import {LoadLaunches} from '../store/launch/launch.actions';
+import {LoadStatuses} from '../store/status/status.actions';
+import {LoadAgencies} from '../store/agencie/agencie.actions';
+import {LoadMissions} from '../store/mission/mission.actions';
 
 @Component({
   selector: 'app-container',
@@ -13,10 +18,11 @@ import {Observable} from 'rxjs';
 export class ContainerComponent implements OnInit {
   public filteredLaunches$: Observable<any[]>;
   public filter: SearchResult;
+  public loaded = false;
 
   constructor(
     private api: ApiService,
-    private global: GlobalStore
+    private store: Store<State>
     ) { }
 
   ngOnInit() {
@@ -25,16 +31,17 @@ export class ContainerComponent implements OnInit {
     this.observeLaunches();
   }
   private loadData() {
-    this.api.getLaunches();
-    this.api.getStatusTypes();
-    this.api.getAgencies();
-    this.api.getMissionTypes();
+    this.store.dispatch(new LoadLaunches());
+    this.store.dispatch(new LoadStatuses());
+    this.store.dispatch(new LoadAgencies());
+    this.store.dispatch(new LoadMissions());
   }
 
   private observeLaunches() {
-    this.filteredLaunches$ = this.global.select$(GlobalSlideTypes.launches)
-      .pipe(
-        map(launches => launches
+    this.filteredLaunches$ = this.store.select('launch').pipe(
+      tap(() => (this.loaded = true)),
+      map(st => st.launches),
+      map(launches => launches
             .filter(l => this.filterItem(l))
             .sort((a, b) => (a.isostart > b.isostart ? 1 : -1))
         ),

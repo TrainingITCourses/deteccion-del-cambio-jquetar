@@ -123,5 +123,8 @@
       }
     }
   },
-  "defaultProject": "ejercicio"
+  "defaultProject": "ejercicio",
+  "cli": {
+    "defaultCollection": "@ngrx/schematics"
+  }
 }

@@ -1,3 +1,4 @@
+<div>V.:{{version}}</div>
 <app-search (filter)="onFilter($event)"></app-search>
 <div *ngIf="filteredLaunches$">
   <app-counter [counter]="{length:(filteredLaunches$ | async).length, message:'Launches found'}"></app-counter>

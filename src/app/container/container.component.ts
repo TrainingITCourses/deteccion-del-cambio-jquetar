@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {ApiService} from '../store/api.service';
 import {SearchResult} from './search/search.component';
 import {map, tap} from 'rxjs/operators';
@@ -19,7 +19,7 @@ export class ContainerComponent implements OnInit {
   public filteredLaunches$: Observable<any[]>;
   public filter: SearchResult;
   public loaded = false;
-
+  @Input() public version;
   constructor(
     private api: ApiService,
     private store: Store<State>

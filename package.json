@@ -11,11 +11,11 @@
     "build:ssr": "npm run build:client-and-server-bundles && npm run webpack:server",
     "build:client-and-server-bundles": "ng build --prod && ng run ejercicio:server ",
     "webpack:server": "webpack --config webpack.server.config.js --progress --colors",
-    "serve:ssr": "node dist/ejercicio"
-
+    "serve:ssr": "node dist/server"
   },
   "private": true,
   "dependencies": {
+    "@angular/router": "^6.1.0",
     "@angular/animations": "^6.1.10",
     "@angular/common": "^6.1.10",
     "@angular/compiler": "^6.1.10",
@@ -25,7 +25,6 @@
     "@angular/platform-browser": "^6.1.10",
     "@angular/platform-browser-dynamic": "^6.1.10",
     "@angular/platform-server": "^6.1.10",
-    "@angular/router": "^6.1.0",
     "@nguniversal/express-engine": "^7.0.2",
     "@nguniversal/module-map-ngfactory-loader": "^7.0.2",
     "core-js": "^2.5.4",

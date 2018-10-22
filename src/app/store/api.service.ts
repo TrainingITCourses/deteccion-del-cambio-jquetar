@@ -1,8 +1,9 @@
-import {Injectable} from '@angular/core';
+import {Inject, Injectable, PLATFORM_ID} from '@angular/core';
 import {Observable, of } from 'rxjs';
-import { environment } from 'src/environments/environment';
+import { environment } from '../../environments/environment';
 import {map, tap} from 'rxjs/operators';
 import {HttpClient} from '@angular/common/http';
+import {isPlatformBrowser} from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
@@ -15,8 +16,11 @@ export class ApiService  {
   private key = 'launches';
 
 
-  constructor(private http: HttpClient) {
-    const launches = localStorage.getItem(this.key);
+  constructor(private http: HttpClient, @Inject(PLATFORM_ID) private platformId: Object) {
+    let launches;
+    if (isPlatformBrowser(this.platformId)) {
+      launches = localStorage.getItem(this.key);
+    }
     if (!launches) {
       this.getLaunches$();
     }
@@ -26,19 +30,14 @@ export class ApiService  {
 
   }
 
-  public getLaunches$ = (): Observable<any[]> => {
-    if (!this.launches) {
-      return of(this.launches);
-    }
-    return this.http
-      .get(environment.url + '/assets/launchlibrary.json')
+  public getLaunches$ = (): Observable<any[]> =>
+    this.http.
+    get(environment.url + '/assets/launchlibrary.json')
       .pipe(
         map((res: any) => res.launches),
-        tap(res => (this.launches = res)),
-        tap(() => localStorage.setItem(this.key, JSON.stringify(this.launches))
-        )
-      );
-  }
+        tap(res => (this.launches = res))
+      )
+
 
   public getAgencies$ = (): Observable<any[]> =>
     this.http.

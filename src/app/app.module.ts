@@ -16,7 +16,7 @@ import { HttpClientModule } from '@angular/common/http';
     CounterComponent,
   ],
   imports: [
-    BrowserModule, HttpClientModule
+    BrowserModule.withServerTransition({ appId: 'serverApp' }), HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

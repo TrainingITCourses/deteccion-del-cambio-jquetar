@@ -1,0 +1,4 @@
+<div>
+  <span *ngIf="counter.length > 0; else noData">Nº launches: {{counter.length}}</span>
+  <ng-template #noData>No data yet</ng-template>
+</div>

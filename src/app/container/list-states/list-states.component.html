@@ -1,0 +1,8 @@
+<div *ngFor="let status of statuses">
+  <span>
+    {{ status.name}}
+  </span>
+  <span>
+    <a [routerLink]="['/states', status.id]">Link</a>
+  </span>
+</div>

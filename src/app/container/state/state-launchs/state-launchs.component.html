@@ -1,0 +1,8 @@
+<div *ngFor="let launch of launches">
+  <span>
+    {{ launch.name}}
+  </span>
+  <span>
+    <a [routerLink]="['/', 'launchs', launch.id]">Link</a>
+  </span>
+</div>
